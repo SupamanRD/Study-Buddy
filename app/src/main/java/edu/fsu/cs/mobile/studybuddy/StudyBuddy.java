@@ -2,10 +2,14 @@ package edu.fsu.cs.mobile.studybuddy;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.internal.BottomNavigationItemView;
+import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
-import android.widget.TextView;
+
+import java.lang.reflect.Field;
 
 public class StudyBuddy extends AppCompatActivity {
 
@@ -70,6 +74,8 @@ public class StudyBuddy extends AppCompatActivity {
         setContentView(R.layout.activity_study_buddy);
 
         nav = findViewById(R.id.navigation);
+
+        disableShift(nav);
         nav.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         //set up main fragment first
@@ -81,8 +87,33 @@ public class StudyBuddy extends AppCompatActivity {
                 .addToBackStack(MainFragment.TAG)
                 .commit();
 
+        nav.setSelectedItemId(R.id.navigation_study);
+
+    }
 
 
+    //Found of stack overflow to fix bottom navigation disblay to correctly show 5 options
+    public static void disableShift(BottomNavigationView view){
+        BottomNavigationMenuView menuView = (BottomNavigationMenuView) view.getChildAt(0);
+        try {
+            Field shiftingMode = menuView.getClass().getDeclaredField("mShiftingMode");
+            shiftingMode.setAccessible(true);
+            shiftingMode.setBoolean(menuView, false);
+            shiftingMode.setAccessible(false);
+            for (int i = 0; i < menuView.getChildCount(); i++) {
+                BottomNavigationItemView item = (BottomNavigationItemView) menuView.getChildAt(i);
+                //noinspection RestrictedApi
+                //noinspection RestrictedApi
+                item.setShiftingMode(false);
+                // set once again checked value, so view will be updated
+                //noinspection RestrictedApi
+                item.setChecked(item.getItemData().isChecked());
+            }
+        } catch (NoSuchFieldException e) {
+            Log.e("BNVHelper", "Unable to get shift mode field", e);
+        } catch (IllegalAccessException e) {
+            Log.e("BNVHelper", "Unable to change value of shift mode", e);
+        }
     }
 
 }
