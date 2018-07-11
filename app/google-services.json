@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "144055806572",
+    "firebase_url": "https://studybuddy-6960c.firebaseio.com",
+    "project_id": "studybuddy-6960c",
+    "storage_bucket": "studybuddy-6960c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:144055806572:android:27b71ea640b928d8",
+        "android_client_info": {
+          "package_name": "edu.fsu.cs.mobile.studybuddy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "144055806572-oi2brdj0pecc6oei28jeu3lsvh58kcue.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBxqt8oNEnzeh3iSvF9O12PP23v4P2wcDE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
