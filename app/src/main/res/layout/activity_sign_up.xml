@@ -51,17 +51,16 @@
         android:id="@+id/inputPass"
         android:layout_width="291dp"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/regName"
-        android:layout_marginStart="-290dp"
-        android:layout_toEndOf="@+id/inputName"
+        android:layout_alignBottom="@+id/regPass"
+        android:layout_alignParentEnd="true"
         android:hint="Don't make it easy..." />
 
     <EditText
         android:id="@+id/inputName"
         android:layout_width="290dp"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/regPass"
-        android:layout_alignStart="@+id/inputEmail"
+        android:layout_alignBottom="@+id/regName"
+        android:layout_alignParentEnd="true"
         android:hint="Ex. John Smith" />
 
     <Button

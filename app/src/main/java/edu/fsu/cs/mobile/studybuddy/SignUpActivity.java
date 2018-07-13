@@ -30,8 +30,8 @@ public class SignUpActivity extends AppCompatActivity {
     private EditText email, password, name;
     private Button register;
 
-    //private FirebaseDatabase mDatabase;
-    //private DatabaseReference mRef;
+    private FirebaseDatabase mDatabase;
+    private DatabaseReference mRef;
 
     //private FirebaseStorage mStorageRef;
     @Override
@@ -39,7 +39,7 @@ public class SignUpActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
-       /// mDatabase = FirebaseDatabase.getInstance();
+        mDatabase = FirebaseDatabase.getInstance();
         mAuth = FirebaseAuth.getInstance();
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -63,13 +63,13 @@ public class SignUpActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
                             String userID = mAuth.getCurrentUser().getUid();
-                            //mRef = FirebaseDatabase.getInstance().getReference().child("Users").child(userID);
+                            mRef = FirebaseDatabase.getInstance().getReference().child("Users").child(userID);
 
                             String regName = name.getText().toString();
                             Map newUser = new HashMap();
                             newUser.put("Name", regName);
 
-                            //mRef.setValue(newUser);
+                            mRef.setValue(newUser);
                             startActivity(new Intent(SignUpActivity.this, StudyBuddy.class));
 
 
