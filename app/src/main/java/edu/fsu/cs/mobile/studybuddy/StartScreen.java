@@ -27,7 +27,7 @@ public class StartScreen extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // redirect to login activity
-                //startActivity(new Intent(StartScreen.this, ______.class));
+                startActivity(new Intent(StartScreen.this, Login.class));
             }
         });
 
@@ -35,7 +35,7 @@ public class StartScreen extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // redirect to signup activity
-                //startActivity(new Intent(StartScreen.this, ______.class));
+                startActivity(new Intent(StartScreen.this, SignUpActivity.class));
             }
         });
 
