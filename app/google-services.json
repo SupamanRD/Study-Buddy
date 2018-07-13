@@ -23,6 +23,14 @@
           }
         },
         {
+          "client_id": "144055806572-baolcrtc57ebn2gfc6dof0i6ntv8d4od.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "edu.fsu.cs.mobile.studybuddy",
+            "certificate_hash": "e729e1c7331172d9e670506411d8794a2bf0a0fd"
+          }
+        },
+        {
           "client_id": "144055806572-oi2brdj0pecc6oei28jeu3lsvh58kcue.apps.googleusercontent.com",
           "client_type": 3
         }
