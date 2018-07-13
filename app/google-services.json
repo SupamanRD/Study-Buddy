@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "144055806572-go42ffrhir78uckr65n28db8rvl41a2m.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "edu.fsu.cs.mobile.studybuddy",
+            "certificate_hash": "7de17cd9512e386c18391323cc0c21acbb8c9786"
+          }
+        },
+        {
           "client_id": "144055806572-oi2brdj0pecc6oei28jeu3lsvh58kcue.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,8 +37,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "144055806572-oi2brdj0pecc6oei28jeu3lsvh58kcue.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2
