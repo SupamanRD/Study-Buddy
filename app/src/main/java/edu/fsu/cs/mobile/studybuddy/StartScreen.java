@@ -10,7 +10,6 @@ public class StartScreen extends AppCompatActivity {
 
     private Button login;
     private Button signup;
-    private Button main;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,8 +19,6 @@ public class StartScreen extends AppCompatActivity {
         login = findViewById(R.id.login);
         signup = findViewById(R.id.signup);
 
-        // this will eventually be taken out
-        main = findViewById(R.id.main);
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -39,13 +36,6 @@ public class StartScreen extends AppCompatActivity {
             }
         });
 
-        //will be removed eventually
-        main.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(StartScreen.this, StudyBuddy.class));
-            }
-        });
 
     }
 }
