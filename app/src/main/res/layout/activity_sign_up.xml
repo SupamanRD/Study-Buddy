@@ -45,7 +45,8 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/regEmail"
         android:layout_alignParentEnd="true"
-        android:hint="Ex. abc@gmail.com" />
+        android:hint="Ex. abc@gmail.com"
+        android:inputType="textEmailAddress"/>
 
     <EditText
         android:id="@+id/inputPass"
@@ -53,7 +54,8 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/regPass"
         android:layout_alignParentEnd="true"
-        android:hint="Don't make it easy..." />
+        android:hint="Don't make it easy..."
+        android:inputType="textPassword"/>
 
     <EditText
         android:id="@+id/inputName"
