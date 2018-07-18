@@ -1,5 +1,8 @@
 package edu.fsu.cs.mobile.studybuddy;
 
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.internal.BottomNavigationItemView;
@@ -9,9 +12,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.lang.reflect.Field;
 
 public class StudyBuddy extends AppCompatActivity {
+
+    private static final String LOCATION_TAG = "LocationTag";
+
+    public static boolean isCheckedIn = false;
+    private LocationManager mLocationManager;
+    protected LatLng diracLatLng = new LatLng(30.4450, -84.2999);
 
     private BottomNavigationView nav;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -21,6 +32,8 @@ public class StudyBuddy extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_messages:
+                    requestLocationUpdates();
+
                     MessagesFragment mess = new MessagesFragment();
                     getSupportFragmentManager()
                             .beginTransaction()
@@ -30,6 +43,8 @@ public class StudyBuddy extends AppCompatActivity {
                     return true;
 
                 case R.id.navigation_map:
+                    requestLocationUpdates();
+
                     MapFragment map = new MapFragment();
                     getSupportFragmentManager()
                             .beginTransaction()
@@ -39,6 +54,8 @@ public class StudyBuddy extends AppCompatActivity {
                     return true;
 
                 case R.id.navigation_study:
+                    requestLocationUpdates();
+
                     MainFragment main = new MainFragment();
                     getSupportFragmentManager()
                             .beginTransaction()
@@ -48,6 +65,8 @@ public class StudyBuddy extends AppCompatActivity {
                     return true;
 
                 case R.id.navigation_classes:
+                    requestLocationUpdates();
+
                     ClassesFragment classes = new ClassesFragment();
                     getSupportFragmentManager()
                             .beginTransaction()
@@ -56,6 +75,8 @@ public class StudyBuddy extends AppCompatActivity {
                     return true;
 
                 case R.id.navigation_menu:
+                    requestLocationUpdates();
+
                     MenuFragment menu = new MenuFragment();
                     getSupportFragmentManager()
                             .beginTransaction()
@@ -72,6 +93,8 @@ public class StudyBuddy extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_study_buddy);
+
+        mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
         nav = findViewById(R.id.navigation);
 
@@ -90,7 +113,6 @@ public class StudyBuddy extends AppCompatActivity {
         nav.setSelectedItemId(R.id.navigation_study);
 
     }
-
 
     //Found of stack overflow to fix bottom navigation disblay to correctly show 5 options
     public static void disableShift(BottomNavigationView view){
@@ -116,4 +138,67 @@ public class StudyBuddy extends AppCompatActivity {
         }
     }
 
+    public static boolean getIsCheckedIn() {
+        return  isCheckedIn;
+    }
+
+    public static void setIsCheckedIn(boolean val) {
+        isCheckedIn = val;
+    }
+
+    private LocationListener mLocationListener = new LocationListener() {
+        @Override
+        public void onLocationChanged(Location location) {
+            double lat = location.getLatitude();
+
+            //truncate lat val
+            lat *= 10000;
+            lat = (int) lat;
+
+            lat /= 10000.0;
+
+            double lng = location.getLongitude();
+            //truncate lng val
+            lng *= 10000;
+            lng = (int) lng;
+
+            lng /= 10000.0;
+
+            //set isCheckedIn if at Dirac
+            if (Math.abs(lat - diracLatLng.latitude) < 1 && Math.abs(lng - diracLatLng.longitude) < 1) {
+                isCheckedIn = true;
+                Log.i("IsAtDirac", "yes");
+            }else {
+                isCheckedIn = false;
+                Log.i("IsAtDirac", "no");
+            }
+
+            //remove updates
+            mLocationManager.removeUpdates(this);
+        }
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+
+        }
+
+        @Override
+        public void onProviderEnabled(String provider) {
+
+        }
+
+        @Override
+        public void onProviderDisabled(String provider) {
+
+        }
+    };
+
+    public void requestLocationUpdates() {
+        try {
+            mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+                    0, 0, mLocationListener);
+        } catch (SecurityException e) {
+            Log.i(LOCATION_TAG, "GPS Location failed");
+        }
+    }
 }

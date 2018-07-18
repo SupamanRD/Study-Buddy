@@ -1,8 +1,8 @@
 package edu.fsu.cs.mobile.studybuddy;
 
-
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +14,12 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 
 
 /**
@@ -22,6 +28,11 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class MapFragment extends Fragment implements
         GoogleMap.OnMarkerClickListener,
         OnMapReadyCallback{
+
+    private FirebaseDatabase db;
+    private DatabaseReference dbRef;
+    public static final String FIREBASE_TABLE = "Users";
+    private int userCount = 0;
 
     public MapFragment() {
         // Required empty public constructor
@@ -37,6 +48,8 @@ public class MapFragment extends Fragment implements
 
         mapFrag.getMapAsync(this);
 
+        setClassCount();
+
         return rootView;
     }
 
@@ -51,9 +64,47 @@ public class MapFragment extends Fragment implements
 
     @Override
     public boolean onMarkerClick(final Marker marker) {
-        String str = "# of users found";
+        String str;
+
+        if (StudyBuddy.getIsCheckedIn()) {
+            str = "# of users found: " + userCount;
+        }else {
+            str = "please go to Dirac";
+        }
         marker.setTitle(str);
 
         return false;
+    }
+
+    public void setClassCount() {
+        final String currentClass = "COP3014";
+
+        db = FirebaseDatabase.getInstance();
+        dbRef = db.getReference(FIREBASE_TABLE);
+        dbRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                    //checks if "Class" exists
+                    if (userSnapshot.child("Class").exists()) {
+                        String classStr = userSnapshot.child("Class").getValue() + "";
+
+                        classStr = classStr.substring(classStr.indexOf(currentClass), classStr.indexOf(currentClass) + 7);
+                        Log.i("UserClass", classStr);
+                        //compare classStr to currentClass
+                        //increment user count if matches
+                        if (classStr.equals(currentClass)) {
+                            userCount++;
+                        }
+                    }
+
+                    Log.i("UserCount", userCount + "");
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+            }
+        });
     }
 }
