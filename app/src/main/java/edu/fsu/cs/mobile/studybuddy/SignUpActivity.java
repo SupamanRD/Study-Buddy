@@ -76,12 +76,13 @@ public class SignUpActivity extends AppCompatActivity {
                             String regName = name.getText().toString();
                             Map newUser = new HashMap();
                             newUser.put("Name", regName);
-                            newUser.put("active", "false");
+                            newUser.put("active", "true");
 
                             mRef.setValue(newUser);
 
                             Map<String, Object> user = new HashMap<>();
                             user.put("active", "false");
+                            user.put("name", regName);
                             db.collection("users")
                                     .document(FirebaseAuth.getInstance().getCurrentUser().getUid())
                                     .set(user);

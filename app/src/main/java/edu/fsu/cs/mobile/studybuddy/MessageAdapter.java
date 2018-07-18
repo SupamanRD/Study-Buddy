@@ -2,12 +2,22 @@ package edu.fsu.cs.mobile.studybuddy;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.util.ArrayList;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHolder>{
 
@@ -60,14 +70,38 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
 
     public class MessageViewHolder extends RecyclerView.ViewHolder{
         TextView message;
+        TextView timestamp;
 
         public MessageViewHolder(View itemView) {
             super(itemView);
             message = itemView.findViewById(R.id.chat_message);
+            timestamp = itemView.findViewById(R.id.timestamp);
         }
 
         public void bind(Messages chat){
             message.setText(chat.getMessage());
+
+            Long millis = chat.getSent();
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+            db.collection("users")
+                    .document(chat.getSenderId())
+                    .get()
+                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            String test = documentSnapshot.getString("name");
+                            timestamp.setText(test);
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    // Toast.makeText(, "", Toast.LENGTH_SHORT).show();
+                    // Log.d("Tag",e.toString());
+                    Log.i("shame", "onFailure:");
+                }
+            });
+
         }
 
     }

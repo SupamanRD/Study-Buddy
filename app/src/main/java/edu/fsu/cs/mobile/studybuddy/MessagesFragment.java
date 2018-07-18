@@ -119,7 +119,7 @@ public class MessagesFragment extends Fragment {
 
     private void getChat(EventListener<QuerySnapshot> listener) {
         db.collection("chats")
-                .whereEqualTo("class_id", class_id)
+                .whereEqualTo("class_name", class_name)
                 .orderBy("sent", Query.Direction.DESCENDING)
                 .addSnapshotListener(listener);
     }
@@ -139,7 +139,7 @@ public class MessagesFragment extends Fragment {
                             new Messages(
                                     doc.getId(),
                                     doc.getString("library_id"),
-                                    doc.getString("class_id"),
+                                    doc.getString("class_name"),
                                     doc.getString("sender_id"),
                                     doc.getString("message"),
                                     doc.getLong("sent")
@@ -162,7 +162,7 @@ public class MessagesFragment extends Fragment {
         mButton.setEnabled(false);
 
         Map<String, Object> chat = new HashMap<>();
-        chat.put("class_id", class_id);
+        chat.put("class_name", class_name);
         chat.put("library_id", library_id);
         chat.put("sender_id", userId);
         chat.put("message", send);

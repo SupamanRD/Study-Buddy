@@ -3,6 +3,7 @@ package edu.fsu.cs.mobile.studybuddy;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -38,7 +39,7 @@ public class MainFragment extends Fragment {
     RecyclerView recyclerView;
 
     public static final String TAG = MainFragment.class.getCanonicalName();
-    FirebaseFirestore db;
+    private FirebaseFirestore db;
     private FirebaseUser currentFirebaseUser;
 
 
@@ -125,6 +126,10 @@ public class MainFragment extends Fragment {
         @Override
         public void onClick(ClassChat clicked) {
             Log.i(TAG, "onClick: " + clicked.getID());
+
+            BottomNavigationView navigationView = (BottomNavigationView) getActivity().findViewById(R.id.navigation);
+            navigationView.getMenu().getItem(0).setChecked(true);
+
             MessagesFragment mess = MessagesFragment.newInstance(clicked.getID(), clicked.getName());
             getActivity().getSupportFragmentManager()
                     .beginTransaction()

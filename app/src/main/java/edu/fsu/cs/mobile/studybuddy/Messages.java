@@ -4,15 +4,15 @@ public class Messages {
 
     private String id;
     private String libraryId;
-    private String classId;
+    private String className;
     private String senderId;
     private String message;
     private long sent;
 
-    public Messages(String id, String libraryId, String classId,String senderID, String message, long sent){
+    public Messages(String id, String libraryId, String className,String senderID, String message, long sent){
         this.id = id;
         this.libraryId = libraryId;
-        this.classId = classId;
+        this.className = className;
         this.senderId = senderID;
         this.message = message;
         this.sent = sent;
@@ -34,12 +34,12 @@ public class Messages {
         this.libraryId = libraryId;
     }
 
-    public String getClassId() {
-        return classId;
+    public String getClassName() {
+        return className;
     }
 
-    public void setClassId(String classId) {
-        this.classId = classId;
+    public void setClassName(String className) {
+        this.className = className;
     }
 
     public String getSenderId() {
