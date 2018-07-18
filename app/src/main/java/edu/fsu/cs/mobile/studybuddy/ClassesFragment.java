@@ -17,11 +17,16 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -39,7 +44,7 @@ public class ClassesFragment extends Fragment {
     private ListView cList;
     private Button add, del;
     private String getEntry;
-    //private Map<String> schedule = new HashMap<String, String>();
+    private Map<String, String> schedule = new HashMap<String, String>();
 
     public ClassesFragment() {
         // Required empty public constructor
@@ -67,6 +72,26 @@ public class ClassesFragment extends Fragment {
         String userID = mAuth.getCurrentUser().getUid();
         mRef = FirebaseDatabase.getInstance().getReference().child("Users").child(userID).child("Class");
 
+        mRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                final List<String> schedule = new ArrayList<String>();
+
+                for(DataSnapshot classSnapshot: dataSnapshot.getChildren()) {
+                    String classCode = classSnapshot.child("courseCode").getValue(String.class);
+                    schedule.add(classCode);
+                }
+                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
+                            android.R.layout.simple_list_item_1, schedule);
+                    cList.setAdapter(adapter);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
 
         add.setOnClickListener(new View.OnClickListener() {
@@ -82,23 +107,20 @@ public class ClassesFragment extends Fragment {
                     public void onClick(DialogInterface dialog, int which) {
                         getEntry = classEntry.getText().toString();
                         for(int i = 0; i < classArr.length; i++){
-                            if(classArr[i].equals("")){
+                            if(classArr[i].equals("")) {
                                 classArr[i] = getEntry;
                                 Toast.makeText(getActivity(), classArr[i],
                                         Toast.LENGTH_SHORT).show();
-                                mRef.push().setValue(classArr[i]);
-                                //schedule.put(String.valueOf(i), classArr[i]);
+                                //mRef.push().setValue(classArr[i]);
+                                schedule.put("courseCode", classArr[i]);
                                 break;
-                            }
-                            else if(!classArr[i].equals("")){
-                                //schedule.put(String.valueOf(i), classArr[i]);
                             }
                         }
 
-                        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
+                        /*ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
                                 android.R.layout.simple_list_item_1, classArr);
-                        cList.setAdapter(adapter);
-                        //mRef.push().setValue(schedule);
+                        cList.setAdapter(adapter);*/
+                        mRef.push().setValue(schedule);
 
                     }
                 });
@@ -116,6 +138,7 @@ public class ClassesFragment extends Fragment {
 
             }
         });
+
 
 
         return v;
