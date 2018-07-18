@@ -18,4 +18,6 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_maps">Map</string>
+    <string name="welcome_str">Welcome to Dirac Library!!!</string>
+    <string name="welcome_error_str">You\'re not at Dirac...</string>
 </resources>

@@ -11,6 +11,7 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -162,7 +163,9 @@ public class StudyBuddy extends AppCompatActivity {
         public void onLocationChanged(Location location) {
             double lat = location.getLatitude();
             FirebaseFirestore db = FirebaseFirestore.getInstance();
-            FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();;
+            FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
+            TextView welcomeTxt = findViewById(R.id.welcome_txt);
 
             //truncate lat val
             lat *= 10000;
@@ -183,11 +186,13 @@ public class StudyBuddy extends AppCompatActivity {
                         .document(currentFirebaseUser.getUid())
                         .update("active", "true");
                 isCheckedIn = true;
+                welcomeTxt.setText(R.string.welcome_str);
                 Log.i(TAG, "YYYYYYYYYYYYYYYYYYYYEEEEEEEEEEEEEEEEEEEEEEEEEEEESSSSSSSSSSSSSSSSSSSSSSSSSS");
             }else {
                 db.collection("users")
                         .document(currentFirebaseUser.getUid())
                         .update("active", "false");
+                welcomeTxt.setText(R.string.welcome_error_str);
                 isCheckedIn = false;
                 Log.i(TAG, "NONNNNNNNNNNNNNNNNNNNNNNNNNNNNNOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
             }
