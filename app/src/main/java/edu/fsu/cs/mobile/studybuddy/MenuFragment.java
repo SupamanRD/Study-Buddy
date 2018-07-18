@@ -18,6 +18,7 @@ import com.google.firebase.auth.FirebaseAuth;
 public class MenuFragment extends Fragment {
 
     private Button logout;
+    private Button changePassword;
 
 
     public MenuFragment() {
@@ -37,12 +38,20 @@ public class MenuFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootview = inflater.inflate(R.layout.fragment_menu, container, false);
         logout = rootview.findViewById(R.id.logout);
+        changePassword = rootview.findViewById(R.id.changePass);
 
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FirebaseAuth.getInstance().signOut();
                 startActivity(new Intent(getActivity(), StartScreen.class));
+            }
+        });
+
+        changePassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), ChangePassword.class));
             }
         });
 
