@@ -12,10 +12,21 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -24,8 +35,12 @@ import com.google.firebase.firestore.QuerySnapshot;
 public class MainFragment extends Fragment {
 
     private ClassAdapter mAdapter;
+    RecyclerView recyclerView;
 
     public static final String TAG = MainFragment.class.getCanonicalName();
+    FirebaseFirestore db;
+    private FirebaseUser currentFirebaseUser;
+
 
 
     public MainFragment() {
@@ -38,38 +53,74 @@ public class MainFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootview = inflater.inflate(R.layout.fragment_main, container, false);
-        RecyclerView recyclerView = rootview.findViewById(R.id.available);
-        mAdapter = new ClassAdapter(getContext(), listener);
+        recyclerView = rootview.findViewById(R.id.available);
+
+
 
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(mAdapter);
 
-        loadClasses();
+        db = FirebaseFirestore.getInstance();
+        currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
+
+        db.collection("users")
+                .document(currentFirebaseUser.getUid())
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        String test = documentSnapshot.getString("active");
+                        if(test.equals("true")){
+                            loadMyClasses();
+                        }
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                // Toast.makeText(, "", Toast.LENGTH_SHORT).show();
+                // Log.d("Tag",e.toString());
+                Log.i(TAG, "onFailure:");
+            }
+        });
+
 
         return rootview;
     }
 
-    private void loadClasses() {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-
+    private void getClasses(EventListener<QuerySnapshot> listener2) {
         db.collection("class")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (DocumentSnapshot document : task.getResult()) {
-                                ClassChat user = new ClassChat(document.getId(), document.getString("name"));
-                                mAdapter.addNewUser(user);
-                            }
-                            mAdapter.notifyDataSetChanged();
-                        } else {
-                            Log.w(TAG, "Error getting documents.", task.getException());
-                        }
-                    }
-                });
+                .whereEqualTo("student", currentFirebaseUser.getUid())
+                .orderBy("name")
+                .addSnapshotListener(listener2);
+    }
+
+    private void loadMyClasses() {
+        getClasses(new EventListener<QuerySnapshot>(){
+            @Override
+            public void onEvent(QuerySnapshot snapshots, FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.e("ClassesFragment", "Listen failed.", e);
+                    return;
+                }
+                ArrayList<ClassChat> cls = new ArrayList<>();
+                for (QueryDocumentSnapshot doc : snapshots) {
+                    cls.add(
+                            new ClassChat(
+                                    doc.getId(),
+                                    doc.getString("name"),
+                                    doc.getString("student"),
+                                    doc.getString("active")
+                            )
+                    );
+                }
+
+                mAdapter = new ClassAdapter(cls, listener);
+                recyclerView.setAdapter(mAdapter);
+            }
+
+        });
     }
 
     ClassAdapter.OnClassClickListener listener = new ClassAdapter.OnClassClickListener() {

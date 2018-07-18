@@ -21,15 +21,14 @@ public class ClassAdapter extends RecyclerView.Adapter<ClassAdapter.ClassViewHol
     private ArrayList<ClassChat> classes;
     private Context mContext;
 
-    public ClassAdapter(Context context, OnClassClickListener clicked){
-        mContext = context;
-        classes = new ArrayList<>();
+    public ClassAdapter(ArrayList<ClassChat> cls, OnClassClickListener clicked){
+        classes = cls;
         this.mListener = clicked;
     }
 
-    public void addNewUser(ClassChat add2){
+    /*public void addNewUser(ClassChat add2){
         classes.add(add2);
-    }
+    }*/
 
     @NonNull
     @Override
@@ -37,7 +36,6 @@ public class ClassAdapter extends RecyclerView.Adapter<ClassAdapter.ClassViewHol
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_class_room, parent, false);
         return new ClassViewHolder(view);
-
     }
 
     @Override

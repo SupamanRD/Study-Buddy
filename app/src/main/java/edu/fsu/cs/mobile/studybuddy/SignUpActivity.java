@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -18,6 +19,8 @@ import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,6 +35,8 @@ public class SignUpActivity extends AppCompatActivity {
 
     private FirebaseDatabase mDatabase;
     private DatabaseReference mRef;
+    private FirebaseFirestore db;
+
 
     //private FirebaseStorage mStorageRef;
     @Override
@@ -53,6 +58,9 @@ public class SignUpActivity extends AppCompatActivity {
         name = (EditText) findViewById(R.id.inputName);
         register = (Button) findViewById(R.id.regButton);
 
+        db = FirebaseFirestore.getInstance();
+
+
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -68,9 +76,16 @@ public class SignUpActivity extends AppCompatActivity {
                             String regName = name.getText().toString();
                             Map newUser = new HashMap();
                             newUser.put("Name", regName);
-                            newUser.put("Classes", null);
+                            newUser.put("active", "false");
 
                             mRef.setValue(newUser);
+
+                            Map<String, Object> user = new HashMap<>();
+                            user.put("active", "false");
+                            db.collection("users")
+                                    .document(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                    .set(user);
+
                             startActivity(new Intent(SignUpActivity.this, StudyBuddy.class));
 
 
@@ -82,6 +97,8 @@ public class SignUpActivity extends AppCompatActivity {
                         }
                     }
                 });
+
+
             }
         });
     }

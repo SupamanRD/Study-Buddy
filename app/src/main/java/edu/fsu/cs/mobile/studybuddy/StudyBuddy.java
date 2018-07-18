@@ -12,15 +12,26 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.lang.reflect.Field;
 
 public class StudyBuddy extends AppCompatActivity {
 
     private static final String LOCATION_TAG = "LocationTag";
+    public static final String TAG = StudyBuddy.class.getCanonicalName();
+
 
     public static boolean isCheckedIn = false;
+    //public static int userCount = 0;
+
     private LocationManager mLocationManager;
     protected LatLng diracLatLng = new LatLng(30.4450, -84.2999);
 
@@ -150,6 +161,8 @@ public class StudyBuddy extends AppCompatActivity {
         @Override
         public void onLocationChanged(Location location) {
             double lat = location.getLatitude();
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();;
 
             //truncate lat val
             lat *= 10000;
@@ -166,11 +179,17 @@ public class StudyBuddy extends AppCompatActivity {
 
             //set isCheckedIn if at Dirac
             if (Math.abs(lat - diracLatLng.latitude) < 1 && Math.abs(lng - diracLatLng.longitude) < 1) {
+                db.collection("users")
+                        .document(currentFirebaseUser.getUid())
+                        .update("active", "true");
                 isCheckedIn = true;
-                Log.i("IsAtDirac", "yes");
+                Log.i(TAG, "YYYYYYYYYYYYYYYYYYYYEEEEEEEEEEEEEEEEEEEEEEEEEEEESSSSSSSSSSSSSSSSSSSSSSSSSS");
             }else {
+                db.collection("users")
+                        .document(currentFirebaseUser.getUid())
+                        .update("active", "false");
                 isCheckedIn = false;
-                Log.i("IsAtDirac", "no");
+                Log.i(TAG, "NONNNNNNNNNNNNNNNNNNNNNNNNNNNNNOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
             }
 
             //remove updates
@@ -197,6 +216,7 @@ public class StudyBuddy extends AppCompatActivity {
         try {
             mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
                     0, 0, mLocationListener);
+            Log.i(TAG, "HHHHHHHHHHHHHHHHHHHHHHEEEEEEEEEEEEEEEEEEEYYYYYYYYYYYYYYYYYYYY");
         } catch (SecurityException e) {
             Log.i(LOCATION_TAG, "GPS Location failed");
         }

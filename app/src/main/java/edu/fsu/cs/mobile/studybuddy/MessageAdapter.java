@@ -46,6 +46,14 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
     }
 
     @Override
+    public int getItemViewType(int position){
+        if(mess.get(position).getSenderId().contentEquals(userId))
+            return 0;
+
+        return 1;
+    }
+
+    @Override
     public int getItemCount() {
         return mess.size();
     }

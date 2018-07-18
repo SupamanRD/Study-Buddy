@@ -1,6 +1,7 @@
 package edu.fsu.cs.mobile.studybuddy;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,12 +15,22 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
+import java.util.Map;
 
 
 /**
@@ -29,9 +40,11 @@ public class MapFragment extends Fragment implements
         GoogleMap.OnMarkerClickListener,
         OnMapReadyCallback{
 
-    private FirebaseDatabase db;
+    private FirebaseFirestore db;
     private DatabaseReference dbRef;
     public static final String FIREBASE_TABLE = "Users";
+    public static final String TAG = MapFragment.class.getCanonicalName();
+
     private int userCount = 0;
 
     public MapFragment() {
@@ -44,6 +57,7 @@ public class MapFragment extends Fragment implements
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_map, container, false);
 
+        db = FirebaseFirestore.getInstance();
         SupportMapFragment mapFrag = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
 
         mapFrag.getMapAsync(this);
@@ -66,17 +80,42 @@ public class MapFragment extends Fragment implements
     public boolean onMarkerClick(final Marker marker) {
         String str;
 
+        /*
         if (StudyBuddy.getIsCheckedIn()) {
             str = "# of users found: " + userCount;
         }else {
             str = "please go to Dirac";
-        }
+        }*/
+        str = "# of users found: " + userCount;
         marker.setTitle(str);
 
         return false;
     }
 
+    private void getCount(EventListener<QuerySnapshot> listener2) {
+        db.collection("users")
+                .whereEqualTo("active", "true")
+                .addSnapshotListener(listener2);
+    }
+
     public void setClassCount() {
+
+        getCount(new EventListener<QuerySnapshot>(){
+            @Override
+            public void onEvent(QuerySnapshot snapshots, FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.e("ClassesFragment", "Listen failed.", e);
+                    return;
+                }
+                for (QueryDocumentSnapshot doc : snapshots) {
+                    userCount++;
+                }
+            }
+
+        });
+
+
+        /*
         final String currentClass = "COP3014";
 
         db = FirebaseDatabase.getInstance();
@@ -105,6 +144,6 @@ public class MapFragment extends Fragment implements
             @Override
             public void onCancelled(DatabaseError error) {
             }
-        });
+        });*/
     }
 }
