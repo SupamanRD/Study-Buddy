@@ -1,77 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SignUpActivity">
+    tools:context=".SignUpActivity"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/regTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Registration"
+        android:text="Sign Up"
+        android:textSize="40sp"
+        android:layout_gravity="center"
+        android:gravity="center|center_vertical"
+        android:layout_weight=".2"
         android:textAppearance="@style/TextAppearance.AppCompat.Title" />
-
-    <TextView
-        android:id="@+id/regEmail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="109dp"
-        android:text="Email" />
-
-    <TextView
-        android:id="@+id/regPass"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
-        android:text="Password" />
-
-    <TextView
-        android:id="@+id/regName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="175dp"
-        android:text="Name" />
 
     <EditText
         android:id="@+id/inputEmail"
-        android:layout_width="290dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/regEmail"
-        android:layout_alignParentEnd="true"
-        android:hint="Ex. abc@gmail.com"
+        android:paddingEnd="16dp"
+        android:paddingStart="16dp"
+        android:hint="Email"
         android:inputType="textEmailAddress"/>
 
     <EditText
         android:id="@+id/inputPass"
-        android:layout_width="291dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/regPass"
-        android:layout_alignParentEnd="true"
-        android:hint="Don't make it easy..."
+        android:paddingEnd="16dp"
+        android:paddingStart="16dp"
+        android:hint="Password"
         android:inputType="textPassword"/>
 
     <EditText
         android:id="@+id/inputName"
-        android:layout_width="290dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/regName"
-        android:layout_alignParentEnd="true"
-        android:hint="Ex. John Smith" />
+        android:paddingEnd="16dp"
+        android:paddingStart="16dp"
+
+        android:hint="Name" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight=".2"
+        />
 
     <Button
         android:id="@+id/regButton"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
+        android:paddingEnd="16dp"
+        android:paddingStart="16dp"
+        android:paddingTop="30dp"
         android:text="Register" />
 
 
-</RelativeLayout>
+</LinearLayout>

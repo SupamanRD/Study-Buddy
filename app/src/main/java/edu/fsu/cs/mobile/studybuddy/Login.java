@@ -8,7 +8,8 @@ import android.view.View;
 
         import android.widget.Button;
         import android.widget.EditText;
-        import android.widget.Toast;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -36,6 +37,14 @@ public class Login extends Activity  {
         b1 = findViewById(R.id.logButton);
         ed1 = findViewById(R.id.logEmail);
         ed2 = findViewById(R.id.logPass);
+
+        TextView textView2 = findViewById(R.id.redirect);
+        textView2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Login.this, SignUpActivity.class));
+            }
+        });
 
         mAuth = FirebaseAuth.getInstance();
         mAuthListener = new FirebaseAuth.AuthStateListener() {

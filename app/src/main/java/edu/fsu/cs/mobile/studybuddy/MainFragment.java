@@ -55,8 +55,6 @@ public class MainFragment extends Fragment {
         View rootview = inflater.inflate(R.layout.fragment_main, container, false);
         recyclerView = rootview.findViewById(R.id.available);
 
-
-
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
