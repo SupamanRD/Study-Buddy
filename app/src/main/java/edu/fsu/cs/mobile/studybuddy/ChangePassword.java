@@ -24,6 +24,8 @@ public class ChangePassword extends Activity {
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
 
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
     private FirebaseDatabase mDatabase;
     private DatabaseReference mRef;
 
@@ -50,7 +52,7 @@ public class ChangePassword extends Activity {
             public void onClick(View v) {
                 String email = ed1.getText().toString();
                 String oldPassword = oldPass.getText().toString();
-                String newPassword = newPass.getText().toString();
+                final String newPassword = newPass.getText().toString();
                 mAuth.signInWithEmailAndPassword(email, oldPassword).addOnCompleteListener(ChangePassword.this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -58,6 +60,8 @@ public class ChangePassword extends Activity {
                             Toast.makeText(ChangePassword.this, "Change failed.",
                                     Toast.LENGTH_SHORT).show();
                         } else {
+                            user.updatePassword(newPassword);
+
                             Intent myIntent = new Intent(ChangePassword.this, StudyBuddy.class);
                             startActivity(myIntent);
                             finish();
