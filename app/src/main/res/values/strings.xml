@@ -7,6 +7,13 @@
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="login">Login</string>
+    <string-array name="entries">
+        <item>Edit Profile</item>
+        <item>Change Password</item>
+        <item>FAQ</item>
+        <item>Terms</item>
+        <item>Logout</item>
+    </string-array>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
