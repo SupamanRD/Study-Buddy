@@ -76,7 +76,7 @@ public class SignUpActivity extends AppCompatActivity {
                             String regName = name.getText().toString();
                             Map newUser = new HashMap();
                             newUser.put("Name", regName);
-                            newUser.put("active", "true");
+                            newUser.put("active", "false");
 
                             mRef.setValue(newUser);
 

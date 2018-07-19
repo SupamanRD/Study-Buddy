@@ -47,6 +47,9 @@ public class ChangePassword extends Activity {
             }
         };
 
+        //needs testing
+        buttonPass.setEnabled(false);
+
         buttonPass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
