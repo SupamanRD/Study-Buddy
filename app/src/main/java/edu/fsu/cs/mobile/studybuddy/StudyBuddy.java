@@ -13,11 +13,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -46,7 +42,7 @@ public class StudyBuddy extends AppCompatActivity {
                 case R.id.navigation_messages:
                     requestLocationUpdates();
 
-                    MessagesFragment mess = new MessagesFragment();
+                    PrivateChatFragment mess = new PrivateChatFragment();
                     getSupportFragmentManager()
                             .beginTransaction()
                             .replace(R.id.fragment_container, mess)
@@ -187,14 +183,12 @@ public class StudyBuddy extends AppCompatActivity {
                         .update("active", "true");
                 isCheckedIn = true;
                 welcomeTxt.setText(R.string.welcome_str);
-                Log.i(TAG, "YYYYYYYYYYYYYYYYYYYYEEEEEEEEEEEEEEEEEEEEEEEEEEEESSSSSSSSSSSSSSSSSSSSSSSSSS");
             }else {
                 db.collection("users")
                         .document(currentFirebaseUser.getUid())
                         .update("active", "false");
                 welcomeTxt.setText(R.string.welcome_error_str);
                 isCheckedIn = false;
-                Log.i(TAG, "NONNNNNNNNNNNNNNNNNNNNNNNNNNNNNOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
             }
 
             //remove updates
@@ -221,7 +215,6 @@ public class StudyBuddy extends AppCompatActivity {
         try {
             mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
                     0, 0, mLocationListener);
-            Log.i(TAG, "HHHHHHHHHHHHHHHHHHHHHHEEEEEEEEEEEEEEEEEEEYYYYYYYYYYYYYYYYYYYY");
         } catch (SecurityException e) {
             Log.i(LOCATION_TAG, "GPS Location failed");
         }

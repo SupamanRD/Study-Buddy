@@ -6,14 +6,16 @@ public class Messages {
     private String libraryId;
     private String className;
     private String senderId;
+    private String senderName;
     private String message;
     private long sent;
 
-    public Messages(String id, String libraryId, String className,String senderID, String message, long sent){
+    public Messages(String id, String libraryId, String className,String senderID, String senderName, String message, long sent){
         this.id = id;
         this.libraryId = libraryId;
         this.className = className;
         this.senderId = senderID;
+        this.senderName = senderName;
         this.message = message;
         this.sent = sent;
     }
@@ -48,6 +50,14 @@ public class Messages {
 
     public void setSenderId(String senderId) {
         this.senderId = senderId;
+    }
+
+    public String getSenderName() {
+        return senderName;
+    }
+
+    public void setSenderName(String senderName) {
+        this.senderName = senderName;
     }
 
     public String getMessage() {

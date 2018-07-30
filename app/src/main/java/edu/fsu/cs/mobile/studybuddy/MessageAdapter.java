@@ -1,22 +1,29 @@
 package edu.fsu.cs.mobile.studybuddy;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHolder>{
@@ -25,9 +32,16 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
     private String userId;
     private ArrayList<Messages> mess;
 
-    public MessageAdapter(ArrayList<Messages> mess, String userId){
+    interface OnMessageClickListener{
+        void onClick(Messages clicked);
+    }
+
+    private OnMessageClickListener clicked;
+
+    public MessageAdapter(ArrayList<Messages> mess, OnMessageClickListener clicked,String userId){
         this.mess = mess;
         this.userId = userId;
+        this.clicked = clicked;
     }
 
 
@@ -53,6 +67,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
     @Override
     public void onBindViewHolder(@NonNull MessageViewHolder holder, int position) {
         holder.bind(mess.get(position));
+
     }
 
     @Override
@@ -71,18 +86,31 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
     public class MessageViewHolder extends RecyclerView.ViewHolder{
         TextView message;
         TextView timestamp;
+        Messages recieved;
 
-        public MessageViewHolder(View itemView) {
+        public MessageViewHolder(final View itemView) {
             super(itemView);
             message = itemView.findViewById(R.id.chat_message);
             timestamp = itemView.findViewById(R.id.timestamp);
+            //if message is clicked it allows user to send private chat
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    clicked.onClick(recieved);
+                }
+            });
+
         }
 
-        public void bind(Messages chat){
+        public void bind(final Messages chat){
             message.setText(chat.getMessage());
+            recieved = chat;
 
             Long millis = chat.getSent();
-            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            final FirebaseFirestore db = FirebaseFirestore.getInstance();
+            final FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
 
             db.collection("users")
                     .document(chat.getSenderId())
@@ -90,7 +118,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
                     .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         @Override
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
-                            String test = documentSnapshot.getString("name");
+                            final String test = documentSnapshot.getString("name");
                             timestamp.setText(test);
                         }
                     }).addOnFailureListener(new OnFailureListener() {
@@ -98,7 +126,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
                 public void onFailure(@NonNull Exception e) {
                     // Toast.makeText(, "", Toast.LENGTH_SHORT).show();
                     // Log.d("Tag",e.toString());
-                    Log.i("shame", "onFailure:");
+                    Log.i("shame", "onFailure:" );
                 }
             });
 

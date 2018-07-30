@@ -40,7 +40,7 @@ public class ClassAdapter extends RecyclerView.Adapter<ClassAdapter.ClassViewHol
 
     @Override
     public void onBindViewHolder(@NonNull ClassViewHolder holder, int position) {
-        holder.bind(classes .get(position));
+        holder.bind(classes.get(position));
     }
 
     @Override
