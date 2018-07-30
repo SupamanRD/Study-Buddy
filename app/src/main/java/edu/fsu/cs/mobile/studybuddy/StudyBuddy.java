@@ -27,8 +27,8 @@ public class StudyBuddy extends AppCompatActivity {
 
 
     public static boolean isCheckedIn = false;
-    //public static int userCount = 0;
 
+    public static Location currentLocation;
     private LocationManager mLocationManager;
     protected LatLng diracLatLng = new LatLng(30.4450, -84.2999);
 
@@ -104,6 +104,13 @@ public class StudyBuddy extends AppCompatActivity {
 
         mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
+        try {
+            //try to get lastKnownLocation
+            currentLocation = mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        }catch (SecurityException ex) {
+            Log.i(TAG, "Can't get last known location");
+        }
+
         nav = findViewById(R.id.navigation);
 
         disableShift(nav);
@@ -157,6 +164,8 @@ public class StudyBuddy extends AppCompatActivity {
     private LocationListener mLocationListener = new LocationListener() {
         @Override
         public void onLocationChanged(Location location) {
+            //set current location
+            currentLocation = new Location(location);
             double lat = location.getLatitude();
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();

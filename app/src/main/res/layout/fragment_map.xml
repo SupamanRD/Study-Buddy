@@ -7,8 +7,15 @@
 
     <fragment
         android:id="@+id/map"
-        android:layout_width= "match_parent"
-        android:layout_height= "match_parent"
-        android:name="com.google.android.gms.maps.SupportMapFragment" />
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="400dp"
+        android:layout_height="383dp" />
+
+    <TextView
+        android:id="@+id/map_txt_view"
+        android:layout_width="412dp"
+        android:layout_height="182dp"
+        android:layout_marginTop="383dp"
+        android:text="TextView" />
 
 </FrameLayout>

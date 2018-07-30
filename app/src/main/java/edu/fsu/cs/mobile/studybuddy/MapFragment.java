@@ -1,5 +1,7 @@
 package edu.fsu.cs.mobile.studybuddy;
 
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -7,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -44,7 +47,13 @@ public class MapFragment extends Fragment implements
     private DatabaseReference dbRef;
     public static final String FIREBASE_TABLE = "Users";
     public static final String TAG = MapFragment.class.getCanonicalName();
+    private View rootView;
+    private TextView txtView;
 
+    private LatLng[] libLocations = {
+            new LatLng(30.4450, -84.2999), //dirac
+            new LatLng(30.4431, -84.2950)  //strozier
+    };
     private int userCount = 0;
 
     public MapFragment() {
@@ -55,7 +64,8 @@ public class MapFragment extends Fragment implements
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_map, container, false);
+        rootView = inflater.inflate(R.layout.fragment_map, container, false);
+        txtView = rootView.findViewById(R.id.map_txt_view);
 
         db = FirebaseFirestore.getInstance();
         SupportMapFragment mapFrag = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
@@ -69,9 +79,32 @@ public class MapFragment extends Fragment implements
 
     @Override
     public void onMapReady(GoogleMap map) {
-        LatLng libLocation = new LatLng(30.4450, -84.2999);
+        LatLng libLocation = libLocations[0];
+//        LatLng libLocation = new LatLng(30.4450, -84.2999);
         map.addMarker(new MarkerOptions().position(libLocation).title("Marker in Dirac Library"));
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(libLocation, 18));
+
+        Location locat = new Location(LocationManager.NETWORK_PROVIDER);
+        locat.setLatitude(libLocation.latitude);
+        locat.setLongitude(libLocation.longitude);
+
+        float dist = locat.distanceTo(StudyBuddy.currentLocation);
+
+
+        dist = convertToMiles(dist);
+
+        String str = "Distances:\n";
+        str += ("\n" + truncateNum(dist, 2) + " miles from Dirac");
+
+        libLocation = libLocations[1];
+        locat.setLatitude(libLocation.latitude);
+        locat.setLongitude(libLocation.longitude);
+
+        dist = locat.distanceTo(StudyBuddy.currentLocation);
+        dist = convertToMiles(dist);
+
+        str += ("\n" + truncateNum(dist, 2) + " miles from Strozier");
+        updateTxtView(str);
 
         map.setOnMarkerClickListener(this);
     }
@@ -80,16 +113,18 @@ public class MapFragment extends Fragment implements
     public boolean onMarkerClick(final Marker marker) {
         String str;
 
-        /*
-        if (StudyBuddy.getIsCheckedIn()) {
-            str = "# of users found: " + userCount;
-        }else {
-            str = "please go to Dirac";
-        }*/
         str = "# of users found: " + userCount;
         marker.setTitle(str);
+        str = "The number of users found:\n";
+        str += userCount;
+
+        updateTxtView(str);
 
         return false;
+    }
+
+    private void updateTxtView(String str) {
+        txtView.setText(str);
     }
 
     private void getCount(EventListener<QuerySnapshot> listener2) {
@@ -113,37 +148,26 @@ public class MapFragment extends Fragment implements
             }
 
         });
+    }
 
-
+    public float convertToMiles(float metersDist) {
         /*
-        final String currentClass = "COP3014";
+         * convert from meters to miles
+         * 1 meter = 0.000621371 miles
+         */
 
-        db = FirebaseDatabase.getInstance();
-        dbRef = db.getReference(FIREBASE_TABLE);
-        dbRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
-                    //checks if "Class" exists
-                    if (userSnapshot.child("Class").exists()) {
-                        String classStr = userSnapshot.child("Class").getValue() + "";
+        float milesDist = (float) (metersDist * 0.000621371);
+        return milesDist;
+    }
 
-                        classStr = classStr.substring(classStr.indexOf(currentClass), classStr.indexOf(currentClass) + 7);
-                        Log.i("UserClass", classStr);
-                        //compare classStr to currentClass
-                        //increment user count if matches
-                        if (classStr.equals(currentClass)) {
-                            userCount++;
-                        }
-                    }
+    public double truncateNum(float num, int decimalPlace) {
+        double newNum;
+        double multOfTen = Math.pow(10, decimalPlace);
 
-                    Log.i("UserCount", userCount + "");
-                }
-            }
+        newNum = (int) (num * multOfTen);
 
-            @Override
-            public void onCancelled(DatabaseError error) {
-            }
-        });*/
+        newNum /= multOfTen;
+
+        return newNum;
     }
 }
