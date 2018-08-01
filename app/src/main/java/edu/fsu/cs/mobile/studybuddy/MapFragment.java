@@ -50,7 +50,7 @@ public class MapFragment extends Fragment implements
     private View rootView;
     private TextView txtView;
 
-    private LatLng[] libLocations = {
+    private LatLng[] libLatLongs = {
             new LatLng(30.4450, -84.2999), //dirac
             new LatLng(30.4431, -84.2950)  //strozier
     };
@@ -79,28 +79,27 @@ public class MapFragment extends Fragment implements
 
     @Override
     public void onMapReady(GoogleMap map) {
-        LatLng libLocation = libLocations[0];
-//        LatLng libLocation = new LatLng(30.4450, -84.2999);
-        map.addMarker(new MarkerOptions().position(libLocation).title("Marker in Dirac Library"));
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(libLocation, 18));
+        //sets the marker to the closer library
+        setMarkerToLib(map);
 
-        Location locat = new Location(LocationManager.NETWORK_PROVIDER);
-        locat.setLatitude(libLocation.latitude);
-        locat.setLongitude(libLocation.longitude);
+        Location libLocation = new Location(LocationManager.NETWORK_PROVIDER);
 
-        float dist = locat.distanceTo(StudyBuddy.currentLocation);
+        LatLng libLatLong = libLatLongs[0];
+        libLocation.setLatitude(libLatLong.latitude);
+        libLocation.setLongitude(libLatLong.longitude);
 
+        float dist = libLocation.distanceTo(StudyBuddy.currentLocation);
 
         dist = convertToMiles(dist);
 
         String str = "Distances:\n";
         str += ("\n" + truncateNum(dist, 2) + " miles from Dirac");
 
-        libLocation = libLocations[1];
-        locat.setLatitude(libLocation.latitude);
-        locat.setLongitude(libLocation.longitude);
+        libLatLong = libLatLongs[1];
+        libLocation.setLatitude(libLatLong.latitude);
+        libLocation.setLongitude(libLatLong.longitude);
 
-        dist = locat.distanceTo(StudyBuddy.currentLocation);
+        dist = libLocation.distanceTo(StudyBuddy.currentLocation);
         dist = convertToMiles(dist);
 
         str += ("\n" + truncateNum(dist, 2) + " miles from Strozier");
@@ -148,6 +147,40 @@ public class MapFragment extends Fragment implements
             }
 
         });
+    }
+
+    public void setMarkerToLib(GoogleMap map) {
+        float distToDirac = getLibDist(libLatLongs[0]);
+        float distToStrozier = getLibDist(libLatLongs[1]);
+
+        //add marker for Strozier
+        map.addMarker(new MarkerOptions().position(libLatLongs[1]).title("Marker in Strozier Library"));
+
+        //add marker for Dirac
+        map.addMarker(new MarkerOptions().position(libLatLongs[0]).title("Marker in Dirac Library"));
+
+        LatLng libLatLong;
+
+        if (distToStrozier < distToDirac) {
+            libLatLong = libLatLongs[1];
+        }else {
+            libLatLong = libLatLongs[0];
+        }
+
+        //move the camera to the closest marker
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(libLatLong, 18));
+    }
+
+    public float getLibDist(LatLng libLatLong) {
+        //get the distance to the library passed in
+
+        Location libLocation = new Location(LocationManager.NETWORK_PROVIDER);
+
+        libLocation.setLatitude(libLatLong.latitude);
+        libLocation.setLongitude(libLatLong.longitude);
+        float dist = libLocation.distanceTo(StudyBuddy.currentLocation);
+
+        return dist;
     }
 
     public float convertToMiles(float metersDist) {
