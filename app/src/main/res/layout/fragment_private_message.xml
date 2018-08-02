@@ -7,10 +7,24 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".PrivateMessageFragment">
 
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="30sp"
+        android:text=""
+        android:textColor="@color/white"
+        android:gravity="center"
+        android:background="@color/garnet"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/chatP"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="410dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
@@ -18,7 +32,7 @@
         app:layout_constraintBottom_toTopOf="@+id/messageP"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/name" />
 
     <ImageButton
         android:id="@+id/sendP"

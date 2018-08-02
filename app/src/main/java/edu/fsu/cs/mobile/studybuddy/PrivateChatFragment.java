@@ -93,7 +93,7 @@ public class PrivateChatFragment extends Fragment {
         @Override
         public void onClick(PrivateChat clicked) {
             //Log.i(TAG, "onClick: " + clicked.getID());
-            PrivateMessageFragment mess = PrivateMessageFragment.newInstance(clicked.getFriend_id());
+            PrivateMessageFragment mess = PrivateMessageFragment.newInstance(clicked.getFriend_id(), clicked.getFriend_name());
             getActivity().getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragment_container, mess)

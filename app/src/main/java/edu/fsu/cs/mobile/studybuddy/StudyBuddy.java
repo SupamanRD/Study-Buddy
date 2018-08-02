@@ -170,7 +170,7 @@ public class StudyBuddy extends AppCompatActivity {
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
-            TextView welcomeTxt = findViewById(R.id.welcome_txt);
+            //TextView welcomeTxt = findViewById(R.id.welcome_txt);
 
             //truncate lat val
             lat *= 10000;
@@ -191,12 +191,12 @@ public class StudyBuddy extends AppCompatActivity {
                         .document(currentFirebaseUser.getUid())
                         .update("active", "true");
                 isCheckedIn = true;
-                welcomeTxt.setText(R.string.welcome_str);
+                //welcomeTxt.setText(R.string.welcome_str);
             }else {
                 db.collection("users")
                         .document(currentFirebaseUser.getUid())
                         .update("active", "false");
-                welcomeTxt.setText(R.string.welcome_error_str);
+                //welcomeTxt.setText(R.string.welcome_error_str);
                 isCheckedIn = false;
             }
 

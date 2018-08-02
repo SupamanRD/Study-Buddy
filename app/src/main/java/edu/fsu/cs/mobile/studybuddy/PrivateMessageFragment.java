@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -40,20 +41,26 @@ public class PrivateMessageFragment extends Fragment {
 
     private EditText message;
     private ImageButton mButton;
+    private TextView mDisplay;
     private FirebaseUser currentFirebaseUser;
     private FirebaseFirestore db;
     private RecyclerView chats;
 
     //this is the id of the person chatting with
     private static final String ARG_PARAM1 = "student_id";
+    private static final String ARG_PARAM2 = "student_name";
+
+
     private String student_id;
+    private String student_name;
 
 
-    public static PrivateMessageFragment newInstance(String Id){
+    public static PrivateMessageFragment newInstance(String Id, String name){
         PrivateMessageFragment frag = new PrivateMessageFragment();
 
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, Id);
+        args.putString(ARG_PARAM2, name);
         frag.setArguments(args);
 
         return frag;
@@ -64,6 +71,7 @@ public class PrivateMessageFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             student_id = getArguments().getString(ARG_PARAM1);
+            student_name = getArguments().getString(ARG_PARAM2);
         }
     }
 
@@ -81,9 +89,12 @@ public class PrivateMessageFragment extends Fragment {
 
         message = rootview.findViewById(R.id.messageP);
         mButton = rootview.findViewById(R.id.sendP);
+        mDisplay = rootview.findViewById(R.id.name);
 
         currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser() ;
         db = FirebaseFirestore.getInstance();
+
+        mDisplay.setText(student_name);
 
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
