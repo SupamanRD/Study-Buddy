@@ -29,6 +29,8 @@ public class StudyBuddy extends AppCompatActivity {
     public static boolean isCheckedIn = false;
 
     public static Location currentLocation;
+    //default location is HCB
+    private static final LatLng DEFAULT_LOCATION = new LatLng(30.443077,-84.297115);
     private LocationManager mLocationManager;
     protected LatLng diracLatLng = new LatLng(30.4450, -84.2999);
 
@@ -107,6 +109,13 @@ public class StudyBuddy extends AppCompatActivity {
         try {
             //try to get lastKnownLocation
             currentLocation = mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+
+            if (currentLocation == null) {
+                //set current locaiton to the default location if lastKnown returns null
+                currentLocation = new Location(LocationManager.NETWORK_PROVIDER);
+                currentLocation.setLongitude(DEFAULT_LOCATION.longitude);
+                currentLocation.setLatitude(DEFAULT_LOCATION.latitude);
+            }
         }catch (SecurityException ex) {
             Log.i(TAG, "Can't get last known location");
         }
@@ -170,8 +179,6 @@ public class StudyBuddy extends AppCompatActivity {
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
-            //TextView welcomeTxt = findViewById(R.id.welcome_txt);
-
             //truncate lat val
             lat *= 10000;
             lat = (int) lat;
@@ -191,12 +198,10 @@ public class StudyBuddy extends AppCompatActivity {
                         .document(currentFirebaseUser.getUid())
                         .update("active", "true");
                 isCheckedIn = true;
-                //welcomeTxt.setText(R.string.welcome_str);
             }else {
                 db.collection("users")
                         .document(currentFirebaseUser.getUid())
                         .update("active", "false");
-                //welcomeTxt.setText(R.string.welcome_error_str);
                 isCheckedIn = false;
             }
 

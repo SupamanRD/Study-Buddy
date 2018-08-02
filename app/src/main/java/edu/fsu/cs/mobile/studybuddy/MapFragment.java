@@ -82,24 +82,15 @@ public class MapFragment extends Fragment implements
         //sets the marker to the closer library
         setMarkerToLib(map);
 
-        Location libLocation = new Location(LocationManager.NETWORK_PROVIDER);
-
-        LatLng libLatLong = libLatLongs[0];
-        libLocation.setLatitude(libLatLong.latitude);
-        libLocation.setLongitude(libLatLong.longitude);
-
-        float dist = libLocation.distanceTo(StudyBuddy.currentLocation);
-
+        //dist to dirac
+        float dist = getLibDist(libLatLongs[0]);
         dist = convertToMiles(dist);
 
         String str = "Distances:\n";
         str += ("\n" + truncateNum(dist, 2) + " miles from Dirac");
 
-        libLatLong = libLatLongs[1];
-        libLocation.setLatitude(libLatLong.latitude);
-        libLocation.setLongitude(libLatLong.longitude);
-
-        dist = libLocation.distanceTo(StudyBuddy.currentLocation);
+        //dist to strozier
+        dist = getLibDist(libLatLongs[1]);
         dist = convertToMiles(dist);
 
         str += ("\n" + truncateNum(dist, 2) + " miles from Strozier");
@@ -141,6 +132,7 @@ public class MapFragment extends Fragment implements
                     Log.e("ClassesFragment", "Listen failed.", e);
                     return;
                 }
+
                 for (QueryDocumentSnapshot doc : snapshots) {
                     userCount++;
                 }
