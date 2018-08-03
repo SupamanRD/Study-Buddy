@@ -14,6 +14,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -21,6 +23,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -91,6 +95,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
         TextView timestamp;
         Messages recieved;
         ImageView image;
+        ImageView profile;
 
 
         public MessageViewHolder(final View itemView) {
@@ -98,6 +103,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
             message = itemView.findViewById(R.id.chat_message);
             timestamp = itemView.findViewById(R.id.timestamp);
             image = itemView.findViewById(R.id.chat_image);
+            profile = itemView.findViewById(R.id.profile_image);
 
             //if message is clicked it allows user to send private chat
 
@@ -111,6 +117,14 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
         }
 
         public void bind(final Messages chat){
+
+            FirebaseStorage mStorage = FirebaseStorage.getInstance();
+            StorageReference mStorageRef = mStorage.getReference();
+
+            Glide.with(itemView.getContext() /* context */)
+                    .using(new FirebaseImageLoader())
+                    .load(mStorageRef.child("images/" + chat.getSenderId() + ".jpg"))
+                    .into(profile);
 
             recieved = chat;
             final FirebaseFirestore db = FirebaseFirestore.getInstance();

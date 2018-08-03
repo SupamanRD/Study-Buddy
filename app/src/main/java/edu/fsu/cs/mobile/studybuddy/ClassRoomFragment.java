@@ -307,6 +307,13 @@ public class ClassRoomFragment extends Fragment {
                             .collection("friend")
                             .document(currentFirebaseUser.getUid())
                             .set(createPrivate2);
+
+
+                    PrivateMessageFragment mess = PrivateMessageFragment.newInstance(clicked.getSenderId(), clicked.getSenderName());
+                    getActivity().getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.fragment_container, mess)
+                            .commit();
                 }
             });
 
