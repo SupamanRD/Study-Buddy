@@ -136,10 +136,10 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
             });
 
             if(chat.getMessage().equals("")){
-                message.setVisibility(View.INVISIBLE);
+                message.setVisibility(View.GONE);
                 image.setVisibility(View.VISIBLE);
                 Uri uri = Uri.parse(chat.getImage());
-                Picasso.get().load(uri).into(image);
+                Picasso.get().load(uri).fit().into(image);
             }
 
             else {

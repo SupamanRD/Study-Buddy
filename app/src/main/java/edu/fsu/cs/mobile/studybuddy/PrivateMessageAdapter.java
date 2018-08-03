@@ -84,7 +84,7 @@ public class PrivateMessageAdapter extends RecyclerView.Adapter<PrivateMessageAd
         public void bind(final PrivateMessage chat){
 
             if(chat.getMessage().equals("")){
-                message.setVisibility(View.INVISIBLE);
+                message.setVisibility(View.GONE);
                 image.setVisibility(View.VISIBLE);
                 Uri uri = Uri.parse(chat.getImage());
                 Picasso.get().load(uri).into(image);

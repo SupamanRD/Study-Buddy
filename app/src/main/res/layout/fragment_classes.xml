@@ -19,6 +19,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:layout_margin="16dp"
-        android:src="@drawable/ic_home_black_24dp"/>
+        app:backgroundTint="@color/gold"
+        android:tint="@color/garnet"
+        android:src="@drawable/baseline_add_white_36"/>
 
 </android.support.design.widget.CoordinatorLayout>

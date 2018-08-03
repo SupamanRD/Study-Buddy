@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".SignUpActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@drawable/log_sign">
 
     <TextView
         android:id="@+id/regTitle"
@@ -15,6 +16,7 @@
         android:text="Sign Up"
         android:textSize="40sp"
         android:layout_gravity="center"
+        android:textColor="@color/white"
         android:gravity="center|center_vertical"
         android:layout_weight=".2"
         android:textAppearance="@style/TextAppearance.AppCompat.Title" />
@@ -26,6 +28,9 @@
         android:paddingEnd="16dp"
         android:paddingStart="16dp"
         android:hint="Email"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white"
+        android:backgroundTint="@color/white"
         android:inputType="textEmailAddress"/>
 
     <EditText
@@ -35,6 +40,9 @@
         android:paddingEnd="16dp"
         android:paddingStart="16dp"
         android:hint="Password"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white"
+        android:backgroundTint="@color/white"
         android:inputType="textPassword"/>
 
     <EditText
@@ -43,7 +51,9 @@
         android:layout_height="wrap_content"
         android:paddingEnd="16dp"
         android:paddingStart="16dp"
-
+        android:textColor="@color/white"
+        android:textColorHint="@color/white"
+        android:backgroundTint="@color/white"
         android:hint="Name" />
 
     <Space
@@ -58,8 +68,12 @@
         android:layout_height="wrap_content"
         android:paddingEnd="16dp"
         android:paddingStart="16dp"
-        android:paddingTop="30dp"
-        android:text="Register" />
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        android:text="Register"
+        android:textColor="@color/white"
+        android:background="@drawable/buttonshape"
+        />
 
 
 </LinearLayout>

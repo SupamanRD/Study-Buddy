@@ -6,6 +6,7 @@
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 
+
     <style name="MyThemeFullScreen" parent="@style/Theme.AppCompat.Light">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
