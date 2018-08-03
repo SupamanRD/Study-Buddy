@@ -19,6 +19,7 @@ public class MenuFragment extends Fragment {
 
     private Button logout;
     private Button changePassword;
+    private Button viewProf;
 
 
     public MenuFragment() {
@@ -39,6 +40,7 @@ public class MenuFragment extends Fragment {
         View rootview = inflater.inflate(R.layout.fragment_menu, container, false);
         logout = rootview.findViewById(R.id.logout);
         changePassword = rootview.findViewById(R.id.changePass);
+        viewProf = (Button) rootview.findViewById(R.id.profBtn);
 
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,6 +56,14 @@ public class MenuFragment extends Fragment {
                 startActivity(new Intent(getActivity(), ChangePassword.class));
             }
         });
+
+        viewProf.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), ProfileActivity.class));
+            }
+        });
+
 
         return rootview;
     }
