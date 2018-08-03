@@ -15,6 +15,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -76,6 +78,10 @@ public class ProfileActivity extends AppCompatActivity {
         userID = user.getUid();
         mStorage = FirebaseStorage.getInstance();
         mStorageRef = mStorage.getReference();
+        Glide.with(this /* context */)
+                .using(new FirebaseImageLoader())
+                .load(mStorageRef.child("images/" + userID))
+                .into(profPic);
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -150,7 +156,7 @@ public class ProfileActivity extends AppCompatActivity {
                 progressDialog.setTitle("Uploading...");
                 progressDialog.show();
 
-                StorageReference ref = mStorageRef.child("images/" + UUID.randomUUID().toString());
+                StorageReference ref = mStorageRef.child("images/" + userID);
                 ref.putFile(filepath)
                         .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                             @Override
@@ -179,6 +185,7 @@ public class ProfileActivity extends AppCompatActivity {
             }
         }
     }
+
 
     private void showData(DataSnapshot dataSnapshot) {
         for(DataSnapshot ds : dataSnapshot.getChildren()){
