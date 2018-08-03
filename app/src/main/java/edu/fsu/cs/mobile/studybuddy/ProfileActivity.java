@@ -80,7 +80,7 @@ public class ProfileActivity extends AppCompatActivity {
         mStorageRef = mStorage.getReference();
         Glide.with(this /* context */)
                 .using(new FirebaseImageLoader())
-                .load(mStorageRef.child("images/" + userID))
+                .load(mStorageRef.child("images/" + userID + ".jpg"))
                 .into(profPic);
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -156,13 +156,17 @@ public class ProfileActivity extends AppCompatActivity {
                 progressDialog.setTitle("Uploading...");
                 progressDialog.show();
 
-                StorageReference ref = mStorageRef.child("images/" + userID);
+                StorageReference ref = mStorageRef.child("images/" + userID + ".jpg");
                 ref.putFile(filepath)
                         .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                             @Override
                             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                                 progressDialog.dismiss();
                                 Toast.makeText(ProfileActivity.this, "File Uploaded", Toast.LENGTH_SHORT).show();
+                                Glide.with(ProfileActivity.this /* context */)
+                                        .using(new FirebaseImageLoader())
+                                        .load(mStorageRef.child("images/" + userID + ".jpg"))
+                                        .into(profPic);
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
@@ -194,7 +198,12 @@ public class ProfileActivity extends AppCompatActivity {
             ufo.setActive(ds.child(userID).getValue(UserInfo.class).getActive());
 
             name.setText(ufo.getName());
-            active.setText(ufo.getActive());
+            if(ufo.getActive().equals("false")) {
+                active.setText("Inactive");
+            }
+            else{
+                active.setText("Active");
+            }
         }
     }
 
