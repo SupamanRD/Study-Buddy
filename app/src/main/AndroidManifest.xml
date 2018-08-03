@@ -23,7 +23,8 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".LoadScreen"
+        <activity
+            android:name=".LoadScreen"
             android:screenOrientation="portrait"
             android:theme="@style/MyThemeFullScreen">
             <intent-filter>
@@ -32,7 +33,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".StartScreen"
+        <activity
+            android:name=".StartScreen"
             android:screenOrientation="portrait"
             android:theme="@style/MyThemeNoBar">
             <intent-filter>
@@ -45,12 +47,15 @@
             android:name=".StudyBuddy"
             android:label="@string/title_activity_study_buddy" />
         <activity android:name=".ChangePassword" />
-        <activity android:name=".SignUpActivity"
+        <activity
+            android:name=".SignUpActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MyThemeNoBar"/>
-        <activity android:name=".Login"
+            android:theme="@style/MyThemeNoBar" />
+        <activity
+            android:name=".Login"
             android:screenOrientation="portrait"
-            android:theme="@style/MyThemeNoBar"/>
+            android:theme="@style/MyThemeNoBar" />
+        <activity android:name=".ProfileActivity"></activity>
     </application>
 
 </manifest>

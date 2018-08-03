@@ -55,6 +55,8 @@ public class MapFragment extends Fragment implements
             new LatLng(30.4431, -84.2950)  //strozier
     };
     private int userCount = 0;
+    private ArrayList<String> courseArry = new ArrayList<>();
+
 
     public MapFragment() {
         // Required empty public constructor
@@ -103,10 +105,20 @@ public class MapFragment extends Fragment implements
     public boolean onMarkerClick(final Marker marker) {
         String str;
 
+        //set marker title to active user count
         str = "# of users found: " + userCount;
         marker.setTitle(str);
-        str = "The number of users found:\n";
-        str += userCount;
+
+        str = "Active Courses:\n";
+
+        //concat the course, comma separated
+        for (int i = 0, l = courseArry.size() - 1; i < l; i++) {
+            str += courseArry.get(i);
+            str += ", ";
+        }
+
+        //concat the last course in arry
+        str += courseArry.get(courseArry.size() - 1);
 
         updateTxtView(str);
 
@@ -123,8 +135,14 @@ public class MapFragment extends Fragment implements
                 .addSnapshotListener(listener2);
     }
 
-    public void setClassCount() {
+    private void getActiveClasses(EventListener<QuerySnapshot> listener2) {
+        db.collection("class")
+                .whereEqualTo("active", "true")
+                .addSnapshotListener(listener2);
+    }
 
+    public void setClassCount() {
+        //get active user count
         getCount(new EventListener<QuerySnapshot>(){
             @Override
             public void onEvent(QuerySnapshot snapshots, FirebaseFirestoreException e) {
@@ -135,6 +153,22 @@ public class MapFragment extends Fragment implements
 
                 for (QueryDocumentSnapshot doc : snapshots) {
                     userCount++;
+                }
+            }
+
+        });
+
+        //get arry of active classes
+        getActiveClasses(new EventListener<QuerySnapshot>(){
+            @Override
+            public void onEvent(QuerySnapshot snapshots, FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.e("ClassesFragment", "Listen failed.", e);
+                    return;
+                }
+
+                for (QueryDocumentSnapshot doc : snapshots) {
+                    courseArry.add(doc.getString("name"));
                 }
             }
 
