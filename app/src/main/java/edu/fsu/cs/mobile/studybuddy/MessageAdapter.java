@@ -2,6 +2,7 @@ package edu.fsu.cs.mobile.studybuddy;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -9,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +21,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -87,11 +90,15 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
         TextView message;
         TextView timestamp;
         Messages recieved;
+        ImageView image;
+
 
         public MessageViewHolder(final View itemView) {
             super(itemView);
             message = itemView.findViewById(R.id.chat_message);
             timestamp = itemView.findViewById(R.id.timestamp);
+            image = itemView.findViewById(R.id.chat_image);
+
             //if message is clicked it allows user to send private chat
 
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -104,10 +111,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
         }
 
         public void bind(final Messages chat){
-            message.setText(chat.getMessage());
-            recieved = chat;
 
-            Long millis = chat.getSent();
+            recieved = chat;
             final FirebaseFirestore db = FirebaseFirestore.getInstance();
             final FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -129,6 +134,19 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
                     Log.i("shame", "onFailure:" );
                 }
             });
+
+            if(chat.getMessage().equals("")){
+                message.setVisibility(View.INVISIBLE);
+                image.setVisibility(View.VISIBLE);
+                Uri uri = Uri.parse(chat.getImage());
+                Picasso.get().load(uri).into(image);
+            }
+
+            else {
+                message.setText(chat.getMessage());
+            }
+
+
 
         }
 

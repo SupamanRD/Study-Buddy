@@ -1,11 +1,13 @@
 package edu.fsu.cs.mobile.studybuddy;
 
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -14,6 +16,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -69,17 +72,26 @@ public class PrivateMessageAdapter extends RecyclerView.Adapter<PrivateMessageAd
     public class PrivateMessageViewHolder extends RecyclerView.ViewHolder{
         TextView message;
         TextView timestamp;
+        ImageView image;
 
         public PrivateMessageViewHolder(final View itemView) {
             super(itemView);
             message = itemView.findViewById(R.id.chat_message);
             timestamp = itemView.findViewById(R.id.timestamp);
-
+            image = itemView.findViewById(R.id.chat_image);
         }
 
         public void bind(final PrivateMessage chat){
-            message.setText(chat.getMessage());
-            timestamp.setText("temp");
+
+            if(chat.getMessage().equals("")){
+                message.setVisibility(View.INVISIBLE);
+                image.setVisibility(View.VISIBLE);
+                Uri uri = Uri.parse(chat.getImage());
+                Picasso.get().load(uri).into(image);
+            }
+            else {
+                message.setText(chat.getMessage());
+            }
 
         }
 

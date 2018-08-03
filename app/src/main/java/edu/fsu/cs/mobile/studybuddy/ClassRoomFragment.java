@@ -2,7 +2,10 @@ package edu.fsu.cs.mobile.studybuddy;
 
 
 import android.app.AlertDialog;
+import android.content.ContentResolver;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -12,8 +15,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.MimeTypeMap;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -28,10 +33,15 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import static android.app.Activity.RESULT_OK;
 
 
 /**
@@ -42,11 +52,18 @@ public class ClassRoomFragment extends Fragment {
     private MessageAdapter mAdapter;
     private EditText message;
     private ImageButton mButton;
+    private ImageButton mButtonImage;
     private FirebaseUser currentFirebaseUser;
     private FirebaseFirestore db;
     private RecyclerView chats;
+    private TextView mDisplay;
+
 
     private String temp;
+    private FirebaseStorage storage;
+    private StorageReference storageReference;
+    private Uri mUri;
+    private String mImageString;
 
 
     private String class_id;
@@ -90,9 +107,19 @@ public class ClassRoomFragment extends Fragment {
         View rootview = inflater.inflate(R.layout.fragment_class_room, container, false);
         message = rootview.findViewById(R.id.message);
         mButton = rootview.findViewById(R.id.send);
+        mDisplay = rootview.findViewById(R.id.name);
+        mButtonImage = rootview.findViewById(R.id.image);
+
 
         currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser() ;
         db = FirebaseFirestore.getInstance();
+
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReference("images");
+
+        mDisplay.setText(class_name);
+
+
 
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,6 +129,18 @@ public class ClassRoomFragment extends Fragment {
                 }
             }
         });
+
+        mButtonImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(intent, 1);
+            }
+        });
+
 
         chats = rootview.findViewById(R.id.chat);
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
@@ -126,6 +165,71 @@ public class ClassRoomFragment extends Fragment {
 
 
         return rootview;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1 && resultCode == RESULT_OK
+                && data != null && data.getData() != null) {
+            mUri = data.getData();
+            //Toast.makeText(getActivity(),"YEAH", Toast.LENGTH_SHORT).show();
+            sendImageMessage();
+        }
+    }
+
+    private void sendImageMessage() {
+        ContentResolver cR = getActivity().getContentResolver();
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+
+        final StorageReference add = storageReference.child(System.currentTimeMillis()
+                + "." + mime.getExtensionFromMimeType(cR.getType(mUri)));
+
+        add.putFile(mUri)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        add.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                mImageString = uri.toString();
+
+                                message.setText("");
+                                mButton.setEnabled(false);
+                                String userId = currentFirebaseUser.getUid();
+                                String userName = temp;
+
+
+                                Map<String, Object> chat = new HashMap<>();
+                                chat.put("class_name", class_name);
+                                chat.put("library_id", library_id);
+                                chat.put("sender_id", userId);
+                                chat.put("sender_name", userName);
+                                chat.put("message", "");
+                                chat.put("image", mImageString);
+                                chat.put("sent", System.currentTimeMillis());
+
+                                db.collection("chats")
+                                        .add(chat)
+                                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                            @Override
+                                            public void onSuccess(DocumentReference documentReference) {
+                                                mButton.setEnabled(true);
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Toast.makeText(getActivity(),"message failed to send",Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                            }
+                        });
+                        //Toast.makeText(getActivity(),temp, Toast.LENGTH_SHORT).show();
+
+
+                    }
+                });
+
     }
 
     private void getChat(EventListener<QuerySnapshot> listener) {
@@ -154,6 +258,7 @@ public class ClassRoomFragment extends Fragment {
                                     doc.getString("sender_id"),
                                     doc.getString("sender_name"),
                                     doc.getString("message"),
+                                    doc.getString("image"),
                                     doc.getLong("sent")
                             )
                     );
@@ -233,6 +338,7 @@ public class ClassRoomFragment extends Fragment {
         chat.put("sender_id", userId);
         chat.put("sender_name", userName);
         chat.put("message", send);
+        chat.put("image", "");
         chat.put("sent", System.currentTimeMillis());
 
         db.collection("chats")

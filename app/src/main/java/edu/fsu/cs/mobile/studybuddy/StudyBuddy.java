@@ -1,5 +1,6 @@
 package edu.fsu.cs.mobile.studybuddy;
 
+import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -12,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
@@ -232,5 +234,11 @@ public class StudyBuddy extends AppCompatActivity {
         } catch (SecurityException e) {
             Log.i(LOCATION_TAG, "GPS Location failed");
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        //Toast.makeText(this, "working", Toast.LENGTH_SHORT).show();
     }
 }

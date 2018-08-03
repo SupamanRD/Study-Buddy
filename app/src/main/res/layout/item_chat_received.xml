@@ -13,7 +13,20 @@
         android:background="@drawable/chat_recieved"
         android:paddingTop="8dp"
         android:paddingStart="8dp"
-        android:paddingEnd="8dp"/>
+        android:paddingEnd="8dp"
+        android:textSize="20sp"
+        />
+
+    <ImageView
+        android:id="@+id/chat_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:paddingTop="8dp"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:visibility="invisible"
+        />
     <TextView
         android:id="@+id/timestamp"
         android:layout_width="wrap_content"

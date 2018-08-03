@@ -8,15 +8,17 @@ public class Messages {
     private String senderId;
     private String senderName;
     private String message;
+    private String image;
     private long sent;
 
-    public Messages(String id, String libraryId, String className,String senderID, String senderName, String message, long sent){
+    public Messages(String id, String libraryId, String className,String senderID, String senderName, String message,String image, long sent){
         this.id = id;
         this.libraryId = libraryId;
         this.className = className;
         this.senderId = senderID;
         this.senderName = senderName;
         this.message = message;
+        this.image = image;
         this.sent = sent;
     }
 
@@ -76,5 +78,11 @@ public class Messages {
         this.sent = sent;
     }
 
+    public String getImage() {
+        return image;
+    }
 
+    public void setImage(String image) {
+        this.image = image;
+    }
 }
