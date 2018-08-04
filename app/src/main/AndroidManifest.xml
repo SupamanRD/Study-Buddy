@@ -45,17 +45,16 @@
         </activity>
         <activity
             android:name=".StudyBuddy"
-            android:label="@string/title_activity_study_buddy"
-            android:theme="@style/MyThemeFullScreen"/>
+            android:label="@string/title_activity_study_buddy" />
         <activity android:name=".ChangePassword" />
         <activity
             android:name=".SignUpActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MyThemeFullScreen" />
+            android:theme="@style/MyThemeNoBar" />
         <activity
             android:name=".Login"
             android:screenOrientation="portrait"
-            android:theme="@style/MyThemeFullScreen" />
+            android:theme="@style/MyThemeNoBar" />
         <activity android:name=".ProfileActivity"></activity>
     </application>
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -9,10 +9,6 @@
         android:id="@+id/student_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="28sp"
-        android:padding="8dp"
-        android:gravity="center"
-        android:background="@color/gold"
-        android:textColor="@color/garnet"/>
+        android:textSize="28sp"/>
 
-</android.support.v7.widget.CardView>
+</LinearLayout>

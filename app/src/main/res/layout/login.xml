@@ -4,8 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/log_sign">
+    android:layout_height="match_parent">
 
     <ProgressBar
         android:id="@+id/login_progress"
@@ -37,7 +36,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_alignTop="@id/login_form"
                 android:layout_centerHorizontal="true"
-                app:srcCompat="@drawable/seal" />
+                app:srcCompat="@mipmap/ic_launcher_round" />
 
             <LinearLayout
                 android:id="@+id/login_form"
@@ -53,11 +52,7 @@
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:hint="Username or Email"
-                    android:inputType="textPersonName"
-                    android:textColor="@color/white"
-                    android:textColorHint="@color/white"
-                    android:backgroundTint="@color/white"
-                    />
+                    android:inputType="textPersonName" />
 
                 <EditText
                     android:id="@+id/logPass"
@@ -65,10 +60,7 @@
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:hint="Password"
-                    android:inputType="textPassword"
-                    android:textColor="@color/white"
-                    android:textColorHint="@color/white"
-                    android:backgroundTint="@color/white"/>
+                    android:inputType="textPassword" />
 
                 <Space
                     android:layout_width="0dp"
@@ -79,7 +71,7 @@
                     android:id="@+id/radioButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/white"
+
                     android:text="By signing in I agree to the Terms of Service" />
 
 
@@ -87,15 +79,13 @@
                     android:id="@+id/logButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/buttonshape"
-                    android:textColor="@color/white"
+
                     android:text="sign in" />
 
                 <com.google.android.gms.common.SignInButton
                     android:id="@+id/googleButton"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    >
+                    android:layout_height="wrap_content">
 
                 </com.google.android.gms.common.SignInButton>
             </LinearLayout>
@@ -106,8 +96,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/login_form"
                 android:layout_centerHorizontal="true"
-                android:text="Forgot Password"
-                android:textColor="@color/white"/>
+                android:text="Forgot Password" />
 
             <TextView
                 android:id="@+id/signup"
@@ -115,8 +104,7 @@
                 android:layout_height="wrap_content"
                 android:layout_above="@+id/redirect"
                 android:layout_centerHorizontal="true"
-                android:text="No Account?"
-                android:textColor="@color/white"/>
+                android:text="No Account?" />
 
             <TextView
                 android:id="@+id/redirect"
@@ -125,11 +113,93 @@
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
                 android:paddingBottom="16dp"
-                android:textColor="@color/white"
                 android:text="Sign Up" />
 
         </RelativeLayout>
 
 
     </ScrollView>
+    <!--
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@mipmap/ic_launcher_round"
+        />
+
+    <LinearLayout
+        android:id="@+id/login_form"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <AutoCompleteTextView
+            android:id="@+id/email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Username or Email"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Password"
+            android:inputType="textPassword" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="10dp"
+            tools:layout_height="10dp" />
+
+        <Button
+            android:id="@+id/email_sign_in_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:text="@string/action_sign_in_short" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/signup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:text="@string/No_Account"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/getPass"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/Forgot_password"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/login_form" />
+
+-->
 </android.support.constraint.ConstraintLayout>

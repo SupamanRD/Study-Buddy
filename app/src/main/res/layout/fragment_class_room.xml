@@ -44,7 +44,7 @@
         android:adjustViewBounds="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/baseline_send_24"
+        app:srcCompat="@drawable/ic_home_black_24dp"
         />
 
     <EditText
@@ -70,7 +70,7 @@
         android:adjustViewBounds="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/baseline_camera_24" />
+        app:srcCompat="@drawable/ic_home_black_24dp" />
 
 
 

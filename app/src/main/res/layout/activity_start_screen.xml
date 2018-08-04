@@ -5,8 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".StartScreen"
-    android:background="@drawable/start">
+    tools:context=".StartScreen">
 
     <Button
         android:id="@+id/login"
@@ -15,7 +14,6 @@
         android:layout_marginEnd="60dp"
         android:layout_marginStart="60dp"
         android:layout_marginTop="8dp"
-        android:textColor="@color/white"
         android:text="Login"
         android:background="@drawable/buttonshape"
         app:layout_constraintEnd_toEndOf="parent"
@@ -31,15 +29,13 @@
         android:layout_marginStart="60dp"
         android:layout_marginTop="8dp"
         android:background="@drawable/buttonshape"
-        android:textColor="@color/white"
         android:text="signup"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-
-    <LinearLayout
+    <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -47,26 +43,13 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:text="Study Buddy"
+        android:textSize="30sp"
         app:layout_constraintBottom_toTopOf="@+id/signup"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Study "
-            android:textColor="@color/garnet"
-            android:textSize="40sp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Buddy"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textColor="@color/gold"
-            android:textSize="40sp" />
-    </LinearLayout>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textView3"
@@ -78,7 +61,6 @@
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:textColor="@color/white"
         android:text="By joining you agree to our Terms and Conditions"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
